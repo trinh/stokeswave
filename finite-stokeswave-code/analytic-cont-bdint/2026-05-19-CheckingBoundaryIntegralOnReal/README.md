@@ -1,0 +1,1 @@
+Doing a check of the boudary integral vs series method on the real axis

@@ -1,0 +1,1 @@
+Verifies Vanden-Broeck's 1986 Havelock paper for N = 120 up to 5 decimal places

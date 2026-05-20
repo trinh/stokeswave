@@ -1,0 +1,52 @@
+cl()
+
+prob = load(equation='wrinkle')
+prob = load(constants='wrinkle')
+sol = run(prob, DS=-0.1)
+save(sol, 'wrinkle')
+
+plot1 = plot(sol)
+plot1.config(bifurcation_x=(0,),bifurcation_y=(6,))
+wait()
+
+branchpoints = sol("BP")
+for solution in branchpoints:
+	bp = load(solution, DS=-0.01, ISW=-1, NMX=20)
+	print "Solution label", bp["LAB"], "fowards"
+	fw = run(bp)
+	sol = sol + fw
+	plot2 = plot(fw)
+	plot2.config(bifurcation_x=(0,),bifurcation_y=(6,))
+	wait()
+
+plot2 = plot(sol)
+plot2.config(bifurcation_x=(0,),bifurcation_y=(6,))
+wait()
+
+
+# prob = load(equation='wrinkle')
+# prob = load(constants='wrinkle')
+# fw = run(prob)
+# bw = run(prob,DS=-0.1)
+# both = fw + bw
+# sol = merge(both)
+# save(sol, 'wrinkle')
+
+# # Extract fold points
+# lsol = sol("LP")
+
+# #tmpsol = lsol[0]
+# #print "Parameters: ", tmpsol['PAR(1)']
+
+# plot1 = plot(sol)
+# plot1.config(bifurcation_x=(0,),bifurcation_y=(6,))
+# wait()
+
+# print "-------------------------------------"
+# print sol
+
+
+
+# print "-------------------------------------"
+# for solution in lsol:
+# 	print "eps = ", solution['PAR(1)'], ", n = ", solution['PAR(2)'], ", tau = ", solution['PAR(3)']

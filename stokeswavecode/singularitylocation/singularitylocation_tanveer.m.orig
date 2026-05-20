@@ -1,0 +1,131 @@
+close all
+clear all
+
+% Using old method (Just for the sheet 1 UHP singularity)
+
+% =====================================
+%         Load in the solution
+F = load('data/series_N200_ep0.4.mat');
+solseries = F.solseries;
+% ====================================
+
+
+p=0.5;
+q=1;
+path = [p, p+q*1i, -p+q*1i, -p,p, p+q*1i, -p+q*1i, -p,p];
+
+integral = 0;
+figure(1);
+hold on
+
+for k=1:length(path)-1
+    path2 = path(k:k+1);
+    if k == 1
+        [f,g,gp,zp] = gbern_contour(path2,solseries);
+        z = g-zfree(-f,solseries);
+    else
+        g0 = g(end);
+        [f,g,gp,zp] = gbern_contour(path2,solseries,g0);
+        z = g-zfree(-f,solseries);
+    end
+    
+
+    if mod(k,4) == 0
+        t = real(f);
+    elseif mod(k,4) == 1
+        t = imag(f);
+    elseif mod(k,4) == 2
+        t = -real(f);
+    else 
+        t = -imag(f);
+    end
+    
+    t
+    dgam = (1i)^(k)
+    integrand = (f.*gp)./(g);
+    integrand = integrand*dgam;
+    
+    integral = integral + trapz(t, integrand);
+    plot3(real(f),imag(f),imag(z));
+end
+
+location = (1/(2*pi*1i))*integral
+height = pi*(imag(zfree(0,solseries) - zfree(0.5,solseries)))
+tanloc = exp(1i*location);
+
+%{
+% Using rectangular data (but need to go around rectangle twice)
+
+% =====================================
+%         Load in the solution
+F = load('data/recdat_rec10_ep0.9.mat');
+recdat = F.recdat;
+
+F = load('data/series_N200_ep0.05.mat');
+solseries = F.solseries;
+% =====================================
+
+recnum = length(recdat);
+sheet = 2;
+integral = 0;
+
+for k=1:4
+    dgam = (1i)^(k+2);
+    integrand = ((recdat(sheet).ff{k}).*(recdat(sheet).zzp{k}))./(recdat(sheet).zz{k});
+    integrand = integrand*dgam;
+    integral = integral + trapz(recdat(sheet).ff{k}, integrand);
+end
+
+coefficient = (1/(2*pi*1i))*integral
+%}
+
+<<<<<<< mine
+%% Alternative
+clear
+close all
+
+
+% =====================================
+%         Load in the solution
+F = load('data/series_N200_ep0.4.mat');
+solseries = F.solseries;
+% ====================================
+
+p=0.5;
+q = 0.1297;
+path = [p, p+q*1i, -p+q*1i, -p, p, p+q*1i, -p+q*1i, -p, p];
+
+[f,g,~,~,singloc] = gbern_contour(path,solseries);
+singloc
+
+z = g-zfree(-f,solseries);
+figure(1);
+plot3(real(f),imag(f),imag(z));
+figure(2);
+plot3(real(f),imag(f),imag(g));
+=======
+%% Alternative
+close all
+clear all
+
+% =====================================
+%         Load in the solution
+F = load('data/series_N200_ep0.4.mat');
+solseries = F.solseries;
+% ====================================
+
+p=0.5;
+q = 0.1297;
+path = [p, p+q*1i, -p+q*1i, -p, p, p+q*1i, -p+q*1i, -p, p];
+
+[f,g,~,~,singloc] = gbern_contour(path,solseries);
+singloc
+
+z = g-zfree(-f,solseries);
+figure(1);
+plot3(real(f),imag(f),imag(z));
+figure(2);
+plot3(real(f),imag(f),imag(g));
+>>>>>>> theirs
+
+
